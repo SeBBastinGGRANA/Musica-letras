@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compositor de Letras</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Encabezado con logo y contador -->
+        <header class="header">
+            <h1 class="logo">🎵 Compositor</h1>
+            <div class="stats">
+                <!-- Botón para mostrar panel de concepto -->
+                <button id="toggleConceptBtn" class="concept-toggle-btn">
+                    📝 Concepto
+                </button>
+                <span class="separator">•</span>
+                <!-- Botón para mostrar panel de preguntas -->
+                <button id="toggleQuestionsBtn" class="questions-toggle-btn">
+                    ❓ Preguntas
+                </button>
+                <span class="separator">•</span>
+                <!-- NUEVO: Botón para mostrar Plan de Semilla -->
+                <button id="toggleSeedPlanBtn" class="seed-plan-toggle-btn" style="display: none;">
+                    🌱 Mi Plan
+                </button>
+                <span class="separator" id="seedPlanSeparator" style="display: none;">•</span>
+                <!-- Botón para mostrar panel de notas -->
+                <button id="toggleNotesBtn" class="notes-toggle-btn">
+                    📓 Notas
+                </button>
+                <span class="separator">•</span>
+                <!-- Botón para abrir flujo de Semilla Creativa -->
+                <button id="openSeedFlowBtn" class="seed-toggle-btn">
+                    🌱 Nueva Semilla
+                </button>
+                <span class="separator">•</span>
+                <span id="lineCount" class="stat-item">0 líneas</span>
+                <span class="separator">•</span>
+                <span id="wordCount" class="stat-item">0 palabras</span>
+                <span id="saveIndicator" class="save-indicator">Guardado</span>
+            </div>
+        </header>
+
+        <!-- Panel de concepto de la canción -->
+        <section id="conceptPanel" class="concept-panel" style="display: none;">
+            <div class="concept-header">
+                <h2 class="concept-title">Concepto de la Canción</h2>
+                <p class="concept-subtitle">Define el núcleo de tu composición antes de escribir</p>
+            </div>
+
+            <div class="concept-grid">
+                <!-- Campo QUÉ -->
+                <div class="concept-field">
+                    <label for="conceptQue" class="concept-label">
+                        <span class="label-icon">🎯</span>
+                        <span class="label-text">QUÉ</span>
+                    </label>
+                    <p class="concept-hint">Tema central, conflicto principal, de qué trata la canción</p>
+                    <textarea 
+                        id="conceptQue" 
+                        class="concept-textarea" 
+                        placeholder="Ejemplo: El tema central es la celebración del deseo irrefrenable por una figura femenina que encarna una rebeldía atractiva..."
+                        rows="4"
+                    ></textarea>
+                </div>
+
+                <!-- Campo QUIÉN -->
+                <div class="concept-field">
+                    <label for="conceptQuien" class="concept-label">
+                        <span class="label-icon">👤</span>
+                        <span class="label-text">QUIÉN</span>
+                    </label>
+                    <p class="concept-hint">Voz narrativa, a quién se dirige, perspectiva temporal</p>
+                    <textarea 
+                        id="conceptQuien" 
+                        class="concept-textarea" 
+                        placeholder="Ejemplo: Una voz en primera persona (yo), probablemente masculina, que se dirige de forma directa a su interés romántico..."
+                        rows="4"
+                    ></textarea>
+                </div>
+
+                <!-- Campo PARA QUÉ -->
+                <div class="concept-field">
+                    <label for="conceptParaQue" class="concept-label">
+                        <span class="label-icon">💡</span>
+                        <span class="label-text">PARA QUÉ</span>
+                    </label>
+                    <p class="concept-hint">Intención, propósito emocional, qué quieres provocar en el oyente</p>
+                    <textarea 
+                        id="conceptParaQue" 
+                        class="concept-textarea" 
+                        placeholder="Ejemplo: La intención principal es la seducción explícita y la persuasión. La letra funciona como un ritual verbal para iniciar un encuentro..."
+                        rows="4"
+                    ></textarea>
+                </div>
+
+                <!-- Campo CÓMO -->
+                <div class="concept-field">
+                    <label for="conceptComo" class="concept-label">
+                        <span class="label-icon">🎨</span>
+                        <span class="label-text">CÓMO</span>
+                    </label>
+                    <p class="concept-hint">Estilo, tono, atmósfera, recursos literarios, forma de desarrollar la historia</p>
+                    <textarea 
+                        id="conceptComo" 
+                        class="concept-textarea" 
+                        placeholder="Ejemplo: Tono directo y desafiante, lenguaje coloquial urbano, uso de repeticiones para enfatizar la 'locura', ritmo acelerado que refleja la urgencia del deseo..."
+                        rows="4"
+                    ></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel de preguntas orientadoras -->
+        <section id="questionsPanel" class="questions-panel" style="display: none;">
+            <div class="questions-header">
+                <h2 class="questions-title">❓ Preguntas Orientadoras</h2>
+                <p class="questions-subtitle">Plantea preguntas para explorar tu canción antes de escribir</p>
+            </div>
+
+            <div class="questions-content">
+                <p class="questions-guide">
+                    Usa este espacio para hacerte preguntas sobre tu canción. Por ejemplo:
+                    <br>• ¿De qué quiero hablar realmente?
+                    <br>• ¿Qué emoción quiero transmitir?
+                    <br>• ¿Cómo empieza la historia? ¿Cómo termina?
+                    <br>• ¿Qué mensaje central quiero dejar?
+                    <br>• ¿Qué haría sentir al oyente?
+                </p>
+                <textarea 
+                    id="questionsTextarea" 
+                    class="questions-textarea" 
+                    placeholder="Escribe aquí las preguntas que te ayudarán a desarrollar tu canción...
+
+¿Qué sentimiento quiero capturar?
+¿Cuál es el momento más importante de la historia?
+¿Qué pregunta quiero que se haga el oyente?
+..."
+                ></textarea>
+            </div>
+        </section>
+
+        <!-- NUEVO: Panel de Plan de Semilla (se muestra después de completar el flujo) -->
+        <section id="seedPlanPanel" class="seed-plan-panel" style="display: none;">
+            <div class="seed-plan-header">
+                <h2 class="seed-plan-title">🌱 Mi Plan de Semilla</h2>
+                <p class="seed-plan-subtitle">Consulta tu exploración creativa mientras escribes</p>
+            </div>
+
+            <div class="seed-plan-content">
+                <!-- Semilla -->
+                <div class="seed-plan-section">
+                    <h3 class="seed-plan-section-title">Tu Semilla:</h3>
+                    <p class="seed-plan-seed" id="savedSeedDisplay"></p>
+                </div>
+
+                <!-- Banco de Ideas Organizado -->
+                <div class="seed-plan-section">
+                    <h3 class="seed-plan-section-title">Banco de Ideas:</h3>
+                    
+                    <div class="seed-plan-ideas-block green-block">
+                        <h4 class="ideas-block-title">🟢 Lo Real y Sensorial</h4>
+                        <p class="ideas-block-content" id="savedIdeasReal"></p>
+                    </div>
+
+                    <div class="seed-plan-ideas-block purple-block">
+                        <h4 class="ideas-block-title">🟣 Lo Simbólico y Metafórico</h4>
+                        <p class="ideas-block-content" id="savedIdeasSimbolico"></p>
+                    </div>
+
+                    <div class="seed-plan-ideas-block blue-block">
+                        <h4 class="ideas-block-title">🔵 La Historia y lo Personal</h4>
+                        <p class="ideas-block-content" id="savedIdeasHistoria"></p>
+                    </div>
+                </div>
+
+                <!-- Blueprint -->
+                <div class="seed-plan-section">
+                    <h3 class="seed-plan-section-title">Blueprint de Estructura:</h3>
+                    <div id="savedBlueprintDisplay" class="seed-plan-blueprint"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel lateral de notas -->
+        <aside id="notesPanel" class="notes-panel">
+            <div class="notes-header">
+                <h2 class="notes-title">📓 Bloc de Notas Creativas</h2>
+                <button id="closeNotesBtn" class="close-notes-btn">✕</button>
+            </div>
+
+            <!-- Pestañas de navegación -->
+            <nav class="notes-tabs">
+                <button class="notes-tab active" data-tab="ideas">Ideas</button>
+                <button class="notes-tab" data-tab="semantico">Campo Semántico</button>
+                <button class="notes-tab" data-tab="sensoriales">Imágenes</button>
+                <button class="notes-tab" data-tab="metaforas">Metáforas</button>
+                <button class="notes-tab" data-tab="objetos">Objetos</button>
+                <button class="notes-tab" data-tab="momentos">Momentos</button>
+                <button class="notes-tab" data-tab="conflictos">Conflictos</button>
+                <button class="notes-tab" data-tab="preguntas">Preguntas</button>
+            </nav>
+
+            <!-- Contenedores de cada pestaña -->
+            <div class="notes-content">
+                <!-- Pestaña 1: Ideas Generales -->
+                <div class="notes-tab-content active" data-content="ideas">
+                    <h3 class="tab-content-title">💭 Ideas Generales</h3>
+                    <p class="tab-content-hint">Anota cualquier idea, frase suelta o inspiración inicial</p>
+                    <textarea 
+                        id="notesIdeas" 
+                        class="notes-textarea"
+                        placeholder="Ejemplo: historia de amor prohibido, ambiente nocturno, ritmo lento..."
+                    ></textarea>
+                </div>
+
+                <!-- Pestaña 2: Campo Semántico -->
+                <div class="notes-tab-content" data-content="semantico">
+                    <h3 class="tab-content-title">🔤 Campo Semántico</h3>
+                    <p class="tab-content-hint">Palabras clave relacionadas con tu tema (sustantivos, verbos, adjetivos)</p>
+                    <textarea 
+                        id="notesSemantico" 
+                        class="notes-textarea"
+                        placeholder="Ejemplo: noche, sombras, secreto, susurrar, oscuro, clandestino, mirada, silencio..."
+                    ></textarea>
+                </div>
+
+                <!-- Pestaña 3: Imágenes Sensoriales -->
+                <div class="notes-tab-content" data-content="sensoriales">
+                    <h3 class="tab-content-title">👁️ Imágenes Sensoriales</h3>
+                    <p class="tab-content-hint">Detalles que se ven, oyen, huelen, tocan o saborean</p>
+                    <textarea 
+                        id="notesSensoriales" 
+                        class="notes-textarea"
+                        placeholder="Ejemplo: olor a lluvia, piel fría, sabor a sal, luces de neón reflejadas..."
+                    ></textarea>
+                </div>
+
+                <!-- Pestaña 4: Metáforas y Símiles -->
+                <div class="notes-tab-content" data-content="metaforas">
+                    <h3 class="tab-content-title">🌟 Metáforas y Símiles</h3>
+                    <p class="tab-content-hint">Comparaciones creativas y figuras literarias</p>
+                    <textarea 
+                        id="notesMetaforas" 
+                        class="notes-textarea"
+                        placeholder="Ejemplo: 'Eres como el humo', 'Tu amor es un laberinto', 'Tus ojos son dos faroles'..."
+                    ></textarea>
+                </div>
+
+                <!-- Pestaña 5: Objetos Simbólicos -->
+                <div class="notes-tab-content" data-content="objetos">
+                    <h3 class="tab-content-title">🎁 Objetos Simbólicos</h3>
+                    <p class="tab-content-hint">Cosas físicas que representan emociones o ideas</p>
+                    <textarea 
+                        id="notesObjetos" 
+                        class="notes-textarea"
+                        placeholder="Ejemplo: anillo (compromiso), carta vieja (recuerdos), espejo (verdad), puerta cerrada (límite)..."
+                    ></textarea>
+                </div>
+
+                <!-- Pestaña 6: Acciones o Momentos Clave -->
+                <div class="notes-tab-content" data-content="momentos">
+                    <h3 class="tab-content-title">⚡ Momentos Clave</h3>
+                    <p class="tab-content-hint">Acciones específicas o escenas importantes en la narrativa</p>
+                    <textarea 
+                        id="notesMomentos" 
+                        class="notes-textarea"
+                        placeholder="Ejemplo: primer beso, despedida en el aeropuerto, llamada a medianoche, última mirada..."
+                    ></textarea>
+                </div>
+
+                <!-- Pestaña 7: Conflictos y Dualidades -->
+                <div class="notes-tab-content" data-content="conflictos">
+                    <h3 class="tab-content-title">⚖️ Conflictos y Dualidades</h3>
+                    <p class="tab-content-hint">Tensiones, opuestos, contradicciones que generan drama</p>
+                    <textarea 
+                        id="notesConflictos" 
+                        class="notes-textarea"
+                        placeholder="Ejemplo: amor vs odio, quedarse vs irse, verdad vs mentira, día vs noche..."
+                    ></textarea>
+                </div>
+
+                <!-- Pestaña 8: Preguntas Retóricas -->
+                <div class="notes-tab-content" data-content="preguntas">
+                    <h3 class="tab-content-title">❓ Preguntas Retóricas</h3>
+                    <p class="tab-content-hint">Preguntas que generan reflexión (no esperan respuesta literal)</p>
+                    <textarea 
+                        id="notesPreguntas" 
+                        class="notes-textarea"
+                        placeholder="Ejemplo: ¿Dónde quedó lo nuestro? ¿Quién soy sin ti? ¿Hasta cuándo voy a esperarte?..."
+                    ></textarea>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Overlay para cerrar panel de notas -->
+        <div id="notesOverlay" class="notes-overlay"></div>
+
+        <!-- ========================================== -->
+        <!-- FLUJO SEMILLA CREATIVA (3 FASES)          -->
+        <!-- ========================================== -->
+        
+        <!-- Contenedor principal del flujo -->
+        <div id="seedFlowContainer" class="seed-flow-container" style="display: none;">
+            
+            <!-- FASE 1: Plantar la Semilla -->
+            <section id="seedPhase1" class="seed-phase seed-phase-1">
+                <button id="closeSeedFlow" class="close-seed-btn">← Volver al Editor</button>
+                
+                <div class="seed-phase1-content">
+                    <h1 class="seed-main-title">🌱 Planta tu Semilla Creativa</h1>
+                    <p class="seed-instruction">Escribe una palabra, una idea o un sentimiento para empezar.</p>
+                    <p class="seed-example">Ejemplo: Fresa, Soledad, El último tren</p>
+                    
+                    <input 
+                        type="text" 
+                        id="seedInput" 
+                        class="seed-input" 
+                        placeholder="Escribe tu semilla aquí..."
+                        autocomplete="off"
+                    >
+                    
+                    <button id="exploreIdea" class="seed-big-btn" disabled>Explorar Idea →</button>
+                </div>
+            </section>
+
+            <!-- FASE 2: Sala de Exploración (MODIFICADO CON 3 SECCIONES) -->
+            <section id="seedPhase2" class="seed-phase seed-phase-2" style="display: none;">
+                <div class="seed-phase2-header">
+                    <button id="backToPhase1" class="seed-back-btn">← Atrás</button>
+                    <h2 class="seed-current-word">Tu semilla: <span id="displaySeed"></span></h2>
+                    <button id="goToBlueprint" class="seed-next-btn">Construir mi Canción →</button>
+                </div>
+
+                <div class="seed-phase2-layout">
+                    <!-- Menú lateral izquierdo -->
+                    <aside class="seed-exploration-menu">
+                        <h3 class="exploration-menu-title">Explora tu idea</h3>
+                        <button class="exploration-category active" data-category="real">
+                            🟢 Lo Real y Sensorial
+                        </button>
+                        <button class="exploration-category" data-category="simbolico">
+                            🟣 Lo Simbólico y Metafórico
+                        </button>
+                        <button class="exploration-category" data-category="historia">
+                            🔵 La Historia y lo Personal
+                        </button>
+
+                        <!-- Preguntas guía -->
+                        <div class="exploration-questions">
+                            <div class="question-set active" data-set="real">
+                                <p class="question-item">• ¿Qué es?</p>
+                                <p class="question-item">• ¿A qué sabe?</p>
+                                <p class="question-item">• ¿A qué huele?</p>
+                                <p class="question-item">• ¿Cómo se siente al tacto?</p>
+                                <p class="question-item">• ¿Qué sonido hace?</p>
+                            </div>
+                            <div class="question-set" data-set="simbolico">
+                                <p class="question-item">• ¿Qué representa para ti?</p>
+                                <p class="question-item">• ¿Por qué la llamas así?</p>
+                                <p class="question-item">• ¿Con qué la asocias?</p>
+                                <p class="question-item">• ¿Qué emoción provoca?</p>
+                                <p class="question-item">• ¿A qué se parece?</p>
+                            </div>
+                            <div class="question-set" data-set="historia">
+                                <p class="question-item">• ¿Cuándo la experimentaste?</p>
+                                <p class="question-item">• ¿Qué recuerdos trae?</p>
+                                <p class="question-item">• ¿Quién estaba contigo?</p>
+                                <p class="question-item">• ¿Por qué es importante para ti?</p>
+                                <p class="question-item">• ¿Qué te hace sentir ahora?</p>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- MODIFICADO: Lienzo de ideas con 3 secciones separadas -->
+                    <div class="seed-canvas-container">
+                        <h3 class="canvas-title">📝 Banco de Ideas Organizado</h3>
+                        <p class="canvas-subtitle">Cada categoría tiene su propio espacio. La activa se resalta.</p>
+                        
+                        <!-- Sección 1: Lo Real y Sensorial -->
+                        <div class="canvas-section canvas-section-real active" data-section="real">
+                            <div class="canvas-section-header">
+                                <span class="canvas-section-icon">🟢</span>
+                                <h4 class="canvas-section-title">Lo Real y Sensorial</h4>
+                            </div>
+                            <textarea 
+                                id="seedCanvasReal" 
+                                class="seed-canvas seed-canvas-green"
+                                placeholder="Escribe aquí todo lo relacionado con lo sensorial: qué es físicamente, cómo se ve, huele, sabe, suena..."
+                            ></textarea>
+                        </div>
+
+                        <!-- Sección 2: Lo Simbólico y Metafórico -->
+                        <div class="canvas-section canvas-section-simbolico" data-section="simbolico">
+                            <div class="canvas-section-header">
+                                <span class="canvas-section-icon">🟣</span>
+                                <h4 class="canvas-section-title">Lo Simbólico y Metafórico</h4>
+                            </div>
+                            <textarea 
+                                id="seedCanvasSimbolico" 
+                                class="seed-canvas seed-canvas-purple"
+                                placeholder="Escribe aquí lo simbólico: qué representa, con qué lo asocias, qué emociones provoca..."
+                            ></textarea>
+                        </div>
+
+                        <!-- Sección 3: La Historia y lo Personal -->
+                        <div class="canvas-section canvas-section-historia" data-section="historia">
+                            <div class="canvas-section-header">
+                                <span class="canvas-section-icon">🔵</span>
+                                <h4 class="canvas-section-title">La Historia y lo Personal</h4>
+                            </div>
+                            <textarea 
+                                id="seedCanvasHistoria" 
+                                class="seed-canvas seed-canvas-blue"
+                                placeholder="Escribe aquí lo personal: cuándo lo viviste, qué recuerdos trae, por qué es importante para ti..."
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FASE 3: Blueprint (sin cambios visuales, pero ahora guarda todo) -->
+            <section id="seedPhase3" class="seed-phase seed-phase-3" style="display: none;">
+                <div class="seed-phase3-header">
+                    <button id="backToPhase2" class="seed-back-btn">← Atrás a Exploración</button>
+                    <h2 class="blueprint-title">🎼 Blueprint de tu Canción</h2>
+                    <button id="finishBlueprint" class="seed-finish-btn">Finalizar y Guardar →</button>
+                </div>
+
+                <div class="seed-phase3-layout">
+                    <!-- Banco de ideas (izquierda) -->
+                    <aside class="blueprint-ideas-sidebar">
+                        <h3 class="sidebar-title">💡 Tu Banco de Ideas</h3>
+                        <div id="ideasSidebarContent" class="ideas-sidebar-content">
+                            <div class="sidebar-ideas-block">
+                                <strong>🟢 Real/Sensorial:</strong>
+                                <p id="sidebarReal"></p>
+                            </div>
+                            <div class="sidebar-ideas-block">
+                                <strong>🟣 Simbólico:</strong>
+                                <p id="sidebarSimbolico"></p>
+                            </div>
+                            <div class="sidebar-ideas-block">
+                                <strong>🔵 Historia:</strong>
+                                <p id="sidebarHistoria"></p>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Estructura de secciones -->
+                    <div class="blueprint-structure">
+                        <div class="blueprint-controls">
+                            <button id="addSection" class="add-section-btn">+ Añadir Sección</button>
+                        </div>
+
+                        <div id="blueprintSections" class="blueprint-sections">
+                            <!-- Las secciones se generarán dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Área principal de escritura -->
+        <main class="writing-area" id="mainWritingArea">
+            <!-- NUEVO: Selector de categoría de título -->
+            <div class="title-category-wrapper">
+                <label for="titleCategory" class="title-category-label">
+                    <span class="category-icon">🏷️</span>
+                    Categoría del Título:
+                </label>
+                <select id="titleCategory" class="title-category-select">
+                    <option value="">Selecciona un tipo de título...</option>
+                    <option value="momentos">Momentos (Un instante concreto en el tiempo)</option>
+                    <option value="lugares">Lugares (Una ubicación física o emocional)</option>
+                    <option value="nombres">Nombres (Un nombre propio o un personaje)</option>
+                    <option value="colores">Colores (Un color que represente el mood)</option>
+                    <option value="palabras">Palabras Aisladas (Una única palabra que encapsule todo)</option>
+                    <option value="opuestos">Opuestos (Un contraste o una dualidad)</option>
+                    <option value="expresiones">Expresiones Populares (Un dicho o frase hecha)</option>
+                    <option value="avisos">Avisos y Carteles (Frase del lenguaje público/urbano)</option>
+                    <option value="conversaciones">Conversaciones (Frase que suene como diálogo)</option>
+                    <option value="juegos">Juegos de Palabras (Doble sentido o sonoridad ingeniosa)</option>
+                    <option value="reciclados">Títulos Reciclados (Referencia a otra obra)</option>
+                </select>
+                <p class="title-category-hint" id="titleCategoryHint" style="display: none;"></p>
+            </div>
+
+            <!-- Campo de título -->
+            <div class="title-wrapper">
+                <input 
+                    type="text" 
+                    id="songTitle" 
+                    class="song-title" 
+                    placeholder="Título de tu canción..."
+                    autocomplete="off"
+                >
+            </div>
+
+            <!-- Editor de letra -->
+            <div 
+                id="lyricsEditor" 
+                class="lyrics-editor" 
+                contenteditable="true" 
+                role="textbox" 
+                aria-multiline="true"
+                data-placeholder="Empieza a escribir tu letra aquí...&#10;&#10;Cada línea nueva es un verso.&#10;Deja volar tu creatividad."
+            ></div>
+        </main>
+
+        <!-- Pie con instrucciones -->
+        <footer class="footer">
+            <p class="hint">💡 Tip: Tu trabajo se guarda automáticamente cada 3 segundos</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
